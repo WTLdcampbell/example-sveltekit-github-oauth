@@ -54,6 +54,20 @@ npm run dev
 
 10. running `npx sv migrate svelte-5` now
 
+- sadly, after upgrate to Svelte 5, app is now broken
+
+    ```txt
+    Internal server error: C:/Users/DavidCampbell/Documents/GitHub/example-sveltekit-github-oauth/src/routes/+layout.svelte:10:1 Unexpected character '@'
+    Plugin: vite-plugin-svelte
+    File: C:/Users/DavidCampbell/Documents/GitHub/example-sveltekit-github-oauth/src/routes/+layout.svelte:10:1
+        8 |  </svelte:head>
+        9 |
+    10 |  {@render children?.()}
+            ^ (x6)
+    ```
+
+- Reviewing [breaking changes documentation](https://svelte-5-preview.vercel.app/docs/breaking-changes) now. :disappointed: 
+
 ## Notes
 
 - TODO: Update redirect URI
