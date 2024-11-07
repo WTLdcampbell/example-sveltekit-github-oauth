@@ -44,7 +44,7 @@ Repo instructions said to "Create `sqlite.db` and run `setup.sql`."
 
 Setup new Azure SQL Database `msbuxley.database.windows.net`
 
-<img alt="Miss Buxley" src="/miss-buxley.png"/>
+<img alt="Miss Buxley" src="miss-buxley.png"/>
 
 Created [T-SQL setup file](./setup-t-sql.sql)
 
