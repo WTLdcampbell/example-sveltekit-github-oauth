@@ -1,7 +1,7 @@
 # GitHub OAuth example in SvelteKit
 
 1. [Original Repo](https://lucia-auth.com/tutorials/github-oauth/sveltekit) used SQLite.
-2. We will be using Azure SQL Server with [Prisma ORM](https://www.prisma.io/docs/getting-started/quickstart-sqlite).
+2. We will be using Azure SQL Server with [Prisma ORM](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgresql).
 3. Rate limiting is implemented using JavaScript `Map`.
 
 ## Initialize project
@@ -48,7 +48,7 @@ npm run dev
 
 7. Created [T-SQL setup file](./setup-t-sql.sql)
 
-8. Repo instructions want us to run: `sqlite3 sqlite.db` but we are not using SQLite. Now begins the implemention of [Prisma ORM](https://www.prisma.io/docs/getting-started/quickstart-sqlite) to connect to Azure SQL database `msbuxley.database.windows.net` :alien:
+8. Repo instructions want us to run: `sqlite3 sqlite.db` but we are not using SQLite. Now begins the implemention of [Prisma ORM](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgresql) to connect to Azure SQL database `msbuxley.database.windows.net` :alien:
 
 9. Quick deview of package.json seems to indicate this project is using `svelte ^4.2.7`
 
