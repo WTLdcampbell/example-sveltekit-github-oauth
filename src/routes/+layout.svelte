@@ -7,4 +7,8 @@
 	<title>GitHub OAuth example in SvelteKit</title>
 </svelte:head>
 
+{#if children}
 {@render children?.()}
+{:else}
+<p>fallback content</p>
+{/if}
