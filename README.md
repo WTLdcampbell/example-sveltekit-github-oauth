@@ -70,6 +70,33 @@ npm run dev
 
 - Apparently efter upgrading to svelte 5 via CLI, previous Svelte 4 libraries are still cached. Delete `node modules` and `.sveltekit` directories, then re-install via `npm install` if dependencies fail, run `npm-install --force` to upgrade dependencies. So we're running again! :satisfied: Now back to Prisma ORM :alien: 
 
+- Trying to install minimal prisma:
+
+```bash
+/* npm init -y
+npm install prisma typescript tsx @types/node --save-dev */
+npm install prisma --save-dev
+npm install @types/node --save-dev
+```
+
+- invoke the Prisma CLI by prefixing it with npx:
+```bash
+npx prisma
+npx prisma init
+```
+
+added `DATABASE_URL` to `.env`
+
+- Reviewing [prisma connections strings documentation](https://pris.ly/d/connection-strings)
+
+- after some tinkering with the JDBC connection string syntax for a while was finally able to connect and generate [local schema](prisma/schema.prisma) from `Azure SQL Database msbuxley` !!!
+
+- Install and generate Prisma Client [This document is important!](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/install-prisma-client-typescript-postgresql). Whenever we update our Prisma schema, we will have to update our database schema using either `prisma migrate dev` or `prisma db push`. This will keep our database schema in sync with our Prisma schema. The commands will also regenerate the **Prisma Client** to match current schema.
+
+``bash
+npm install @prisma/client
+```
+
 ## Notes
 
 - TODO: Update redirect URI
