@@ -38,25 +38,17 @@ npm run dev
 - Server presented a page with a Signin in via GitHub link
 - followed link and was presented with an OAuth permission requet from GitHub!
 - Holy S**t it worked out of the box!
-- Server/terminal error "SqliteError: no such table: user" which makes sense - we're not using SQLite. Now begins the implemention of [Prisma ORM](https://www.prisma.io/docs/getting-started/quickstart-sqlite)... :alien:
+- Server/terminal error "SqliteError: no such table: user" which makes sense - we're not using SQLite.
 
-Repo instructions said to "Create `sqlite.db` and run `setup.sql`."
+5. Repo instructions said to "Create `sqlite.db` and run `setup.sql`." We'll be skipping this because we are going to use Azure SQL
 
-Setup new Azure SQL Database `msbuxley.database.windows.net`
+6. Setup new Azure SQL Database `msbuxley.database.windows.net`
 
 <img alt="Miss Buxley" src="miss-buxley.png"/>
 
-Created [T-SQL setup file](./setup-t-sql.sql)
+7. Created [T-SQL setup file](./setup-t-sql.sql)
 
-```bash
-sqlite3 sqlite.db
-```
-
-Run the application:
-
-```bash
-pnpm dev
-```
+8. Repo instructions want us to run: `sqlite3 sqlite.db` but we are not using SQLite. Now begins the implemention of [Prisma ORM](https://www.prisma.io/docs/getting-started/quickstart-sqlite) to connect to Azure SQL database `msbuxley.database.windows.net` :alien:
 
 ## Notes
 
