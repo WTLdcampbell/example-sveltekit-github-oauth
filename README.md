@@ -91,6 +91,12 @@ added `DATABASE_URL` to `.env`
 
 - after some tinkering with the JDBC connection string syntax for a while was finally able to connect and generate [local schema](prisma/schema.prisma) from `Azure SQL Database msbuxley` !!!
 
+- Install and generate Prisma Client [This document is important!](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/install-prisma-client-typescript-postgresql). Whenever we update our Prisma schema, we will have to update our database schema using either `prisma migrate dev` or `prisma db push`. This will keep our database schema in sync with our Prisma schema. The commands will also regenerate the **Prisma Client** to match current schema.
+
+``bash
+npm install @prisma/client
+```
+
 ## Notes
 
 - TODO: Update redirect URI
