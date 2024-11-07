@@ -93,9 +93,11 @@ added `DATABASE_URL` to `.env`
 
 - Install and generate Prisma Client [This document is important!](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/install-prisma-client-typescript-postgresql). Whenever we update our Prisma schema, we will have to update our database schema using either `prisma migrate dev` or `prisma db push`. This will keep our database schema in sync with our Prisma schema. The commands will also regenerate the **Prisma Client** to match current schema.
 
-``bash
+```bash
 npm install @prisma/client
 ```
+
+- Now starting to implement a `.svelte.server.ts` file to query our database...
 
 ## Notes
 
