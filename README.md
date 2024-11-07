@@ -50,6 +50,10 @@ npm run dev
 
 8. Repo instructions want us to run: `sqlite3 sqlite.db` but we are not using SQLite. Now begins the implemention of [Prisma ORM](https://www.prisma.io/docs/getting-started/quickstart-sqlite) to connect to Azure SQL database `msbuxley.database.windows.net` :alien:
 
+9. Quick deview of package.json seems to indicate this project is using `svelte ^4.2.7`
+
+10. running `npx sv migrate svelte-5` now
+
 ## Notes
 
 - TODO: Update redirect URI
