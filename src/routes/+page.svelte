@@ -3,7 +3,11 @@
 
 	import type { PageData } from "./$types";
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	const image = `https://avatars.githubusercontent.com/u/${data.user.githubId}`;
 </script>
