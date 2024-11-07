@@ -68,6 +68,8 @@ npm run dev
 
 - Reviewing [breaking changes documentation](https://svelte-5-preview.vercel.app/docs/breaking-changes) now. :disappointed: 
 
+- Apparently efter upgrading to svelte 5 via CLI, previous Svelte 4 libraries are still cached. Delete `node modules` and `.sveltekit` directories, then re-install via `npm install` if dependencies fail, run `npm-install --force` to upgrade dependencies. So we're running again! :satisfied: Now back to Prisma ORM :alien: 
+
 ## Notes
 
 - TODO: Update redirect URI
