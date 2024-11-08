@@ -10,12 +10,12 @@ datasource db {
 model session {
   id         String @id(map: "PK_session") @db.NVarChar(64)
   user_id    String @db.UniqueIdentifier
-  expires_at Int
+  expires_at BigInt
   user       user   @relation(fields: [user_id], references: [id], onUpdate: NoAction, map: "FK_session")
 }
 
 model user {
-  id        String    @id(clustered: false, map: "PK_user") @default(dbgenerated("newsequentialid()"), map: "DF__user__id__04E4BC85") @db.UniqueIdentifier
+  id        String    @id(clustered: false, map: "PK_user") @default(dbgenerated("newsequentialid()"), map: "DF__user__id__3E1D39E1") @db.UniqueIdentifier
   github_id Int       @unique(map: "AK_github_id")
   email     String    @unique(map: "AK_email") @db.NVarChar(320)
   username  String?   @db.NVarChar(256)

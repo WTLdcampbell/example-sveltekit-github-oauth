@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 
 const db = new PrismaClient();
 
-export async function createUser(github_id: number, email: string, username: string): Promise<User> {
+export async function createUser(github_id: number, email: string, username: string): Promise<User | null> {
 	const newuser = await db.user.create({
 		data: {
 			github_id,
@@ -14,12 +14,12 @@ export async function createUser(github_id: number, email: string, username: str
 	if (newuser === null) {
 		throw new Error("Unexpected error");
 	}
-	const user = getUserFromGitHubId(github_id);
+	const user = await getUserFromGitHubId(github_id);
 
 	return user;
 }
 
-export async function getUserFromGitHubId(gitHubId: number): Promise<User> {
+export async function getUserFromGitHubId(gitHubId: number): Promise<User | null> {
 	const result = await db.user.findFirst({
 		where: {
 			github_id: gitHubId
@@ -27,15 +27,19 @@ export async function getUserFromGitHubId(gitHubId: number): Promise<User> {
 	})
 
 	if (result === null) {
-		throw new Error("User not found");
+		//we need to create a new user in our database
+		console.log("User not found. We must add our new GitHub user to our database.");
+		//throw new Error("User not found");
+		return null;
+	} else {
+		const user: User = {
+			id: result.id,
+			gitHubId: result.github_id,
+			email: result.email,
+			username: result.username ?? "default_username"
+		};
+		return user;
 	}
-	const user: User = {
-		id: result.id,
-		gitHubId: result.github_id,
-		email: result.email,
-		username: result.username ?? "default_username"
-	};
-	return user;
 }
 
 export interface User {

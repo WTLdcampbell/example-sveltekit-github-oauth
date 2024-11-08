@@ -9,7 +9,7 @@
 
 	let { data }: Props = $props();
 
-	const image = `https://avatars.githubusercontent.com/u/${data.user.githubId}`;
+	const image = `https://avatars.githubusercontent.com/u/${data.user.github_id}`;
 </script>
 
 <h1>Hi, {data.user.username}!</h1>
