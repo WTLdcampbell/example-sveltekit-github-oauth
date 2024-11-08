@@ -41,11 +41,23 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	const githubUserId = userParser.getNumber("id");
 	const username = userParser.getString("login");
+	let email = null;
+	try{
+	 	email = userParser.getString("email");
+	}
+	catch(e){
+		return new Response("Please verify your GitHub email address.", {
+			status: 400
+		});
+	}
 
-	const existingUser = await getUserFromGitHubId(githubUserId);
+	let existingUser = await getUserFromGitHubId(githubUserId);
+	if (existingUser === null) {
+		existingUser = await createUser(githubUserId, email, username);
+	}
 	if (existingUser !== null) {
 		const sessionToken = generateSessionToken();
-		const session = createSession(sessionToken, existingUser.id);
+		const session = await createSession(sessionToken, existingUser.id);
 		setSessionTokenCookie(event, sessionToken, session.expiresAt);
 		return new Response(null, {
 			status: 302,
@@ -64,7 +76,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			status: 400
 		});
 	}
-	let email: string | null = null;
+	// moved up to be able to createUser
+	//let email: string | null = null;
 	for (const emailRecord of emailListResult) {
 		const emailParser = new ObjectParser(emailRecord);
 		const primaryEmail = emailParser.getBoolean("primary");
@@ -81,12 +94,17 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	const user = await createUser(githubUserId, email, username);
 	const sessionToken = generateSessionToken();
-	const session = createSession(sessionToken, user.id);
-	setSessionTokenCookie(event, sessionToken, session.expiresAt);
-	return new Response(null, {
+	if(user !== null){
+		const session = await createSession(sessionToken, user.id);
+		setSessionTokenCookie(event, sessionToken, session.expiresAt);
+			return new Response(null, {
 		status: 302,
-		headers: {
-			Location: "/"
-		}
+			headers: {
+				Location: "/"
+			}
+		});
+	}
+	return new Response("Could not create the session. Please restart the process.", {
+		status: 400
 	});
 }

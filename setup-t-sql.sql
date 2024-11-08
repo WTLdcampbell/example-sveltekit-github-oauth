@@ -30,7 +30,7 @@ CREATE TABLE [dbo].[session] (
 	user_id UNIQUEIDENTIFIER NOT NULL,
 	CONSTRAINT FK_session FOREIGN KEY (user_id)
 		REFERENCES [dbo].[user](id),
-	expires_at INTEGER NOT NULL
+	expires_at BIGINT NOT NULL
 );
 
 /**
