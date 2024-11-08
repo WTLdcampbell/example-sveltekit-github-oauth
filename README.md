@@ -105,6 +105,8 @@ npm install @prisma/client
 npm install @oslojs/encoding @oslojs/crypto
 ```
 
+- ported `/lib/server/user.ts` and `/lib/server/session.ts` to use prisma. used some bad *any* types to get compile to succeed. need to fix. but first need to get some server-side debugging working...
+
 ## Notes
 
 - TODO: Update redirect URI
