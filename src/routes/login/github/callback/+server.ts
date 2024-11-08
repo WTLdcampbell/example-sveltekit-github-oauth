@@ -42,7 +42,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const githubUserId = userParser.getNumber("id");
 	const username = userParser.getString("login");
 
-	const existingUser = getUserFromGitHubId(githubUserId);
+	const existingUser = await getUserFromGitHubId(githubUserId);
 	if (existingUser !== null) {
 		const sessionToken = generateSessionToken();
 		const session = createSession(sessionToken, existingUser.id);
@@ -79,7 +79,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		});
 	}
 
-	const user = createUser(githubUserId, email, username);
+	const user = await createUser(githubUserId, email, username);
 	const sessionToken = generateSessionToken();
 	const session = createSession(sessionToken, user.id);
 	setSessionTokenCookie(event, sessionToken, session.expiresAt);

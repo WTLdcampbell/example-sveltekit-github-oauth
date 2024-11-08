@@ -44,7 +44,7 @@ npm run dev
 
 6. Setup new Azure SQL Database `msbuxley.database.windows.net`
 
-<img alt="Miss Buxley" src="miss-buxley.png"/>
+![Miss Buxley](miss-buxley.png "Miss Buxley")
 
 7. Created [T-SQL setup file](./setup-t-sql.sql)
 
@@ -98,6 +98,12 @@ npm install @prisma/client
 ```
 
 - Now starting to implement a `.svelte.server.ts` file to query our database...
+
+- Lucia docs recommend [Oslo](https://oslojs.dev/) for encoding and crypto utils.
+
+```bash
+npm install @oslojs/encoding @oslojs/crypto
+```
 
 ## Notes
 
