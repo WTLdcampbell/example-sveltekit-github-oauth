@@ -1,64 +1,77 @@
-import { db } from "./db";
+import { PrismaClient } from '@prisma/client';
+
 import { encodeBase32, encodeHexLowerCase } from "@oslojs/encoding";
 import { sha256 } from "@oslojs/crypto/sha2";
 
-import type { User } from "./user";
 import type { RequestEvent } from "@sveltejs/kit";
 
-export function validateSessionToken(token: string): SessionValidationResult {
-	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const row = db.queryOne(
-		`
-SELECT session.id, session.user_id, session.expires_at, user.id, user.github_id, user.email, user.username FROM session
-INNER JOIN user ON session.user_id = user.id
-WHERE session.id = ?
-`,
-		[sessionId]
-	);
+const db = new PrismaClient();
 
-	if (row === null) {
-		return { session: null, user: null };
-	}
-	const session: Session = {
-		id: row.string(0),
-		userId: row.number(1),
-		expiresAt: new Date(row.number(2) * 1000)
-	};
-	const user: User = {
-		id: row.number(3),
-		githubId: row.number(4),
-		email: row.string(5),
-		username: row.string(6)
-	};
-	if (Date.now() >= session.expiresAt.getTime()) {
-		db.execute("DELETE FROM session WHERE id = ?", [session.id]);
-		return { session: null, user: null };
-	}
-	if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-		session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
-		db.execute("UPDATE session SET expires_at = ? WHERE session.id = ?", [
-			Math.floor(session.expiresAt.getTime() / 1000),
-			session.id
-		]);
+export async function validateSessionToken(token: string): Promise<SessionValidationResult> {
+	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+	
+	const session = await db.session.findFirst({
+		where: {
+			id: sessionId
+		}
+	});
+
+	let user = null;
+	if (session) {
+		user = await db.user.findFirst({
+			where: {
+				id: session.user_id
+			}
+		});
+
+		if (Date.now() >= (new Date(session.expires_at * 1000)).getTime()) {
+			db.session.delete({
+				where: {
+					id: sessionId
+				}
+			});
+			//db.execute("DELETE FROM session WHERE id = ?", [session.id]);
+			//return { session: null, user: null };
+		}
+		if (Date.now() >= (new Date(session.expires_at * 1000)).getTime()) {
+			db.session.update({
+				where: {
+					id: sessionId
+				},
+				data: {
+					expires_at: Date.now() + 1000 * 60 * 60 * 24 * 30
+				}
+			})
+		}
 	}
 	return { session, user };
 }
 
 export function invalidateSession(sessionId: string): void {
-	db.execute("DELETE FROM session WHERE id = ?", [sessionId]);
+	db.session.delete({
+		where: {
+			id: sessionId
+		}
+	})
+	//db.execute("DELETE FROM session WHERE id = ?", [sessionId]);
 }
 
-export function invalidateUserSessions(userId: number): void {
-	db.execute("DELETE FROM session WHERE user_id = ?", [userId]);
+export function invalidateUserSessions(userId: string): void {
+	db.session.delete({
+		where: {
+			id: userId
+		}
+	})
+	//db.execute("DELETE FROM session WHERE user_id = ?", [userId]);
 }
 
-export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date): void {
+export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: number): void {
 	event.cookies.set("session", token, {
 		httpOnly: true,
 		path: "/",
 		secure: import.meta.env.PROD,
 		sameSite: "lax",
-		expires: expiresAt
+		expires: new Date(expiresAt * 1000)
 	});
 }
 
@@ -79,25 +92,34 @@ export function generateSessionToken(): string {
 	return token;
 }
 
-export function createSession(token: string, userId: number): Session {
+export function createSession(token: string, userId: string): Session {
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
 	const session: Session = {
 		id: sessionId,
 		userId,
-		expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+		expiresAt: Date.now() + 1000 * 60 * 60 * 24 * 30
 	};
+	db.session.create({
+		data: {
+			id: session.id,
+			user_id: session.userId,
+			expires_at: session.expiresAt
+		}
+	});
+	/*
 	db.execute("INSERT INTO session (id, user_id, expires_at) VALUES (?, ?, ?)", [
 		session.id,
 		session.userId,
 		Math.floor(session.expiresAt.getTime() / 1000)
 	]);
+	*/
 	return session;
 }
 
 export interface Session {
 	id: string;
-	expiresAt: Date;
-	userId: number;
+	expiresAt: number;
+	userId: string;
 }
 
-type SessionValidationResult = { session: Session; user: User } | { session: null; user: null };
+type SessionValidationResult = { session: any ; user: any };
