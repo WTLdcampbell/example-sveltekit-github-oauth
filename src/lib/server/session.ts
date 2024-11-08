@@ -53,7 +53,7 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 			id: sessionId
 		}
 	})
-	console.log("deleteSession: ", deleteSession);
+	//console.log("deleteSession: ", deleteSession);
 }
 
 export async function invalidateUserSessions(userId: string): Promise<void> {
