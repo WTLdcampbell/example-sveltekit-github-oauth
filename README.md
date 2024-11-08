@@ -105,7 +105,15 @@ npm install @prisma/client
 npm install @oslojs/encoding @oslojs/crypto
 ```
 
-- ported `/lib/server/user.ts` and `/lib/server/session.ts` to use prisma. used some bad *any* types to get compile to succeed. need to fix. but first need to get some server-side debugging working...
+- ported `/lib/server/user.ts` and `/lib/server/session.ts` to use prisma.
+- Used some bad *any* types to get compile to succeed at
+```ts
+type SessionValidationResult = { session: any ; user: any };
+```
+
+- Got Sever-side debugging well in hand now, but hate the laptop's muti-use function keys - can't easily use F10 (Step Over) & F11 (Step into) :angry:
+
+- let me know if you wanna try it out - I'll securely email the `.env` file, or relay values via slack huddle :smirk:
 
 ## Notes
 
